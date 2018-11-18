@@ -63,17 +63,27 @@ NSP_equation <- "NSP~LB+AC+FM+UC+DL+DS+DP+ASTV+MSTV+ALTV+MLTV+Width+Min+Max+Nmax
 NSP_formula <- as.formula(NSP_equation)
 NSP_model <- randomForest(formula= NSP_formula, 
                           data= NSP_train, 
-                          ntree = 1150, 
-                          mtry = 15, 
-                          nodesize = 1.655, #0.001*nrow(NSP_train),
-                          do.trace=T,
-                          norm.votes  = FALSE,
-                          proximity=TRUE)
+                          ntree = 2000, 
+                          mtry = 12, 
+                          nodesize = 12, #0.001*nrow(NSP_train),
+                          do.trace=T)
 plot(NSP_model)
 
+################################ RANDOM PARAMETER SEARCH ##########################################################
+# control <- trainControl(method="repeatedcv", number=10, repeats=3,search = 'random')
+# seed <- 123
+# metric <- "Accuracy"
+# set.seed(seed)
+# mtry <- 4.75
+# tunegrid <- expand.grid(.mtry=mtry)
+# rf_default <- train(NSP~., data=NSP_train, method="rf", metric=metric, tuneLength=16, trControl=control,ntree=2000,do.trace=TRUE,nodesize=12)
+# print(rf_default)
+# attributes(rf_default)
+###################################################################################################################
 
 
 mean(NSP_model$err.rate)
+
 attributes(NSP_model)
 #prediction on test dataset
 View(NSP_test)
